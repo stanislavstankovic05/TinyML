@@ -1,4 +1,4 @@
-# Model Runner
+# TinyML
 
 A wrapper tool that trains and evaluates scikit-learn regression models on a CSV training set. Everything is described by a YAML config: which models, which data, which feature sets, which settings to sweep.
 
