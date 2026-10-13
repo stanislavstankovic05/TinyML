@@ -1,0 +1,8 @@
+feature_set,model,R2,spearman,burst_err_%,wait_cut_%,oracle_%
+all30 (30 static feats),"Ridge (linear, regularized)",-3172.762,0.606,70.0,60.0,79.0
+all30 (30 static feats),DecisionTree(depth=4),-0.028,0.505,68.3,53.7,70.7
+all30 (30 static feats),DecisionTree(depth=8),-0.305,0.476,50.5,50.9,67.0
+all30 (30 static feats),RandomForest-300 (current),0.112,0.546,66.0,54.2,71.4
+all30 (30 static feats),RandomForest-20 (tiny ensemble),0.123,0.542,65.9,54.1,71.3
+all30 (30 static feats),"GradientBoosting (small, 50 trees)",0.155,0.556,69.6,57.8,76.1
+all30 (30 static feats),MLP (8-4 hidden),-15355.159,0.541,73.5,53.0,69.8

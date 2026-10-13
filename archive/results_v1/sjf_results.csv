@@ -1,0 +1,5 @@
+workload_size,avg_wait_fifo,avg_wait_random,avg_wait_sjf_pred,avg_wait_sjf_oracle,pred_reduction_vs_fifo_%,oracle_improvement_captured_%,picked_true_shortest_first_%
+5,0.005823,0.005725,0.002657,0.001362,54.4,71.0,28.0
+10,0.012957,0.013048,0.006017,0.00307,53.6,70.2,11.6
+20,0.027418,0.027539,0.01253,0.006528,54.3,71.3,4.8
+50,0.070793,0.070406,0.032645,0.016842,53.9,70.7,1.4

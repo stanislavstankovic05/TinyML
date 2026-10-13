@@ -1,0 +1,9 @@
+m,score,subset,pool,combos_checked,seconds
+2,0.4581,"static_trip_loops, bitops",full 30-feature search,435,0.0
+3,0.3417,"static_trip_loops, direct_recursion, bitops",full 30-feature search,4060,0.03
+4,0.2475,"static_trip_loops, direct_recursion, mutual_recursion, bitops",full 30-feature search,27405,0.18
+5,0.2138,"bb_count, static_trip_loops, direct_recursion, mutual_recursion, bitops",full 30-feature search,142506,0.94
+6,0.1846,"static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, branches, bitops",full 30-feature search,593775,3.98
+7,0.163,"max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, loads, bitops",full 30-feature search,2035800,14.08
+8,0.1492,"static_trip_loops, bitops, branches, direct_recursion, dyn_trip_loops, max_loop_depth, loads, mutual_recursion","restricted to top 15 mRMR candidates (full search would be 5,852,925 combos)",6435,0.04
+9,0.1344,"static_trip_loops, bitops, direct_recursion, phis, dyn_trip_loops, max_loop_depth, loads, mutual_recursion, selects","restricted to top 15 mRMR candidates (full search would be 14,307,150 combos)",5005,0.04

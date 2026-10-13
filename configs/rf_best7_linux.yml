@@ -1,0 +1,11 @@
+models:
+  - family: random_forest
+    settings: {n_estimators: 100, max_depth: 3}
+data:
+  training_set: dataset/linux/training_set.csv
+output: models/results/linux/rf_best7
+features: [best7, history, best7+history]
+primary: best7
+sweep: false
+seeds: [101, 202, 303, 404, 505]
+folds: 5

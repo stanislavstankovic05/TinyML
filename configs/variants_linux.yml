@@ -1,0 +1,15 @@
+models:
+  - random_forest
+  - family: random_forest
+    name: rf_deep
+    settings: {max_depth: 8, min_samples_leaf: 2}
+    grid: {max_depth: [4, 6, 8, 10], min_samples_leaf: [1, 2, 5]}
+  - family: mlp
+    name: mlp_wide
+    settings: {hidden_layer_sizes: [32, 16]}
+    grid: {alpha: [0.01, 0.1, 1.0]}
+data:
+  training_set: dataset/linux/training_set.csv
+output: models/results/linux/variants
+features: [best7, best7+history]
+seeds: [101, 202, 303]

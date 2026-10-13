@@ -1,0 +1,5 @@
+models: all
+data:
+  training_set: dataset/linux/training_set.csv
+  subsets: dataset/linux/best_subsets.csv
+output: models/results/linux/main

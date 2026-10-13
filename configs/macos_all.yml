@@ -1,0 +1,5 @@
+models: all
+data:
+  training_set: dataset/macos/training_set.csv
+  subsets: dataset/macos/best_subsets.csv
+output: models/results/macos/main

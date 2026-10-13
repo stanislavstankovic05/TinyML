@@ -15,3 +15,9 @@ corpus/tacle-bench/
 dataset/_ll/
 dataset/_bin/
 parper/
+paper/*.tex
+paper/*.pdf
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
