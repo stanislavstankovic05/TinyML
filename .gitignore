@@ -10,10 +10,7 @@ venv/
 .env
 *.log
 
-corpus/
-dataset/
-configs/
-models/results/
-archive/
-paper/
-features.md
+corpus/embench-iot/
+corpus/tacle-bench/
+dataset/_ll/
+dataset/_bin/
