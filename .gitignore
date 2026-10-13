@@ -11,16 +11,9 @@ venv/
 *.log
 
 corpus/
-
-dataset/*
-!dataset/features.csv
-!dataset/features_linux.csv
-!dataset/labels_macos.csv
-!dataset/labels_linux.csv
-!dataset/labels_contended.csv
-
+dataset/
+configs/
 models/results/
-
 archive/
 paper/
 features.md
