@@ -1,6 +1,6 @@
 # Predicting CPU Burst Time from LLVM Static Features
 
-This project asks whether the CPU burst time of a program can be predicted before it runs, using only features computed at compile time, and whether that prediction is good enough to drive a shortest-job-first (SJF) scheduler. The target platform is a small embedded core (RP2040 class), where the cost of a prediction must stay below the benefit of a better schedule.
+This experiment is about predicting the CPU burst time of a program before it runs, using only features computed at compile time, and IF that prediction is good enough to drive a shortest-job-first (SJF) scheduler. The target platform is a small embedded core (RP2040 class), where the computational cost matters a lot, so it is needed to find the optimal trade-off between model complexity and quality of prediction.
 
 The runner and models are documented in [docs/tool.md](docs/tool.md), and the dataset and result scripts in `tools/`. They are also available on their own on the `main` branch. The results below use the macOS dataset only; see [To do](#to-do).
 
@@ -23,7 +23,7 @@ The runner and models are documented in [docs/tool.md](docs/tool.md), and the da
 
 1. Compile every program of a corpus to LLVM IR and extract 30 static features (instruction mix, loop structure, estimated trip counts, call graph shape, stack use, and similar properties).
 2. Run every program and record its CPU time, which is the burst time.
-3. Rank the features by relevance and redundancy (mRMR) and keep the best subset of each size from 2 to 9.
+3. Rank the features by relevance and redundancy (mRMR) and keep the best subset of each size from 2 to n. (for our case, we limited to n = 9).
 4. Train regression models on the logarithm of the burst time and evaluate them with repeated cross-validation, so that every prediction comes from a model that did not see the program.
 5. Simulate scheduling: order random batches of programs by predicted burst time and compare the average waiting time with first-come-first-served (FIFO) and with the oracle, which sorts by the true burst time.
 
@@ -65,11 +65,11 @@ The burst time of each program is its median CPU time over several inputs, measu
 | `dataset/macos/best_subsets.csv` | Best feature subset for each size from 2 to 9 |
 | `dataset/v0_macos_archive/` | First version of the macOS dataset, kept for reference |
 
-The folder also holds Linux and contended-load labels, which are not used in the results below.
+To do: Try to do it on a Linux distro.
 
 ## Feature analysis
 
-Features are ranked with mRMR, which favors features that are correlated with the burst time and not correlated with the features already chosen. For each size `m` from 2 to 9 the best subset is found by exhaustive search over all combinations of that size.
+Features are ranked with mRMR, which favors features that are correlated with the burst time and not correlated with the features already chosen. We try to use only the features that influence our burst time, but also to be disjoint from the others as well. The idea behind is to not have "duplicate" features, that won't improve the model, but will increase the compute time. For each size `m` from 2 to 9 the best subset is found by exhaustive search over all combinations of that size.
 
 ![Feature correlation heatmap](docs/images/feature_correlation_heatmap.png)
 
@@ -89,10 +89,11 @@ The selected subsets:
 | 9 | n_funcs, max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, divrems, bitops, fpops |
 
 The tables behind the figures are in `dataset/macos/`: `feature_relevance.csv`, `feature_redundancy_pairs.csv`, `feature_pairwise_full.csv`, `mrmr_ranking.csv` and `best_subsets.csv`.
+With the help of these diagrams and heatmap, we can rank the features, then choose best k features for our training data.
 
 ## Model results
 
-Eight model families are compared with the seven-feature subset `best7`, five-fold cross-validation, and five repeats with seeds 101, 202, 303, 404 and 505. Values are the mean over the repeats.
+Eight model families are compared with the seven-feature subset `best7` for now, five-fold cross-validation, and five repeats with seeds 101, 202, 303, 404 and 505. Values are the mean over the repeats. To do: we need to evaluate the compute cost as well. There might be a chance that best7 requires a high computation cost.
 
 Metrics:
 
@@ -113,7 +114,7 @@ Metrics:
 
 ![Model comparison](docs/images/model_comparison.png)
 
-The negative R2 of the MLP means that on average its log predictions are worse than predicting the mean. Its ranking is still useful, which is why its Spearman correlation is not far below the others.
+The negative R2 of the MLP means that on average its log predictions are worse than predicting the mean. Its ranking is still useful, which is why its Spearman correlation is not far below the others. We will see that predicting the burst time accurately is not mandatory. 
 
 ### How far off the burst prediction is
 
@@ -130,7 +131,7 @@ The median absolute error of the predicted burst time, next to the scheduling ac
 | ridge | 35.6 | 75.3 |
 | mlp | 35.9 | 74.6 |
 
-### Feature sets
+### Other experiments with different feature sets and different model settings
 
 Extra trees across the feature sets, default settings:
 
@@ -242,11 +243,10 @@ All numbers are from the macOS results above.
 - **The rank correlation tracks the schedule only roughly.** The top models (extra trees, random forest, SVR) and the bottom ones (ridge, MLP) are the same by either measure. In the middle the two disagree, for example gradient boosting has a lower Spearman than k-nearest neighbors (0.664 against 0.676) but a better scheduling result. The correlation is computed over all 377 programs, while the scheduler only orders batches of 20.
 - **The three best models are close.** Extra trees, random forest and SVR are within 1.3 points of each other, which is about the standard deviation over repeats (0.5 to 1.3). They cannot be separated with these five repeats.
 - **The MLP is unstable.** Its standard deviation over repeats is 5.7 points, against about 1 for the others.
-- **Few features are enough.** For extra trees, two features give 81.6% of the oracle's improvement, seven give 87.8%, and all 30 give 89.2%. For random forest the result is flat from six features on (86.5% to 87.2%).
-- **Depth matters only at the start.** Random forest at depth 1 or 2 underfits (73.6% and 83.6%). From depth 3 to unlimited depth the result stays between 87.0% and 87.7%.
+- **Few features are enough.** For extra trees, two features give 81.6% of the oracle's improvement, seven give 87.8%, and all 30 give 89.2%. For random forest the result is flat from six features on (86.5% to 87.2%). Need to test with more code samples.
+- **Depth for random forest influence the prediction only for depth < 3.** Random forest at depth 1 or 2 underfits (73.6% and 83.6%). From depth 3 to unlimited depth the result stays between 87.0% and 87.7%.
 
 ## Conclusion
-
 - A good schedule does not require an accurate burst prediction. The scheduling result depends on the order of the predictions, and models with a median error of 18% to 36% still cut the average wait by 47% to 55% compared with FIFO.
 - Tree ensembles (extra trees and random forest) and SVR are the best models, at 86.5% to 87.8% of the oracle's improvement. Ridge and the MLP are clearly worse, at about 75%.
 - A few features carry most of the value, which keeps the model small. This matters on a microcontroller.
