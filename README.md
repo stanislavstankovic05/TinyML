@@ -15,6 +15,8 @@ The runner and models are documented in [docs/tool.md](docs/tool.md), and the da
 - [Reproducing the results](#reproducing-the-results)
 - [Repository contents](#repository-contents)
 - [Limitations](#limitations)
+- [Observations](#observations)
+- [Conclusion](#conclusion)
 - [To do](#to-do)
 
 ## Approach
@@ -112,6 +114,21 @@ Metrics:
 ![Model comparison](docs/images/model_comparison.png)
 
 The negative R2 of the MLP means that on average its log predictions are worse than predicting the mean. Its ranking is still useful, which is why its Spearman correlation is not far below the others.
+
+### How far off the burst prediction is
+
+The median absolute error of the predicted burst time, next to the scheduling accuracy from the SJF simulator (share of the oracle's improvement). `best7`, default settings, mean over five repeats.
+
+| Model | Median error (%) | SJF accuracy (%) |
+| --- | --- | --- |
+| extra_trees | 17.8 | 87.8 |
+| random_forest | 19.3 | 87.2 |
+| svr | 17.8 | 86.5 |
+| gradient_boosting | 22.7 | 85.5 |
+| knn | 18.9 | 83.1 |
+| decision_tree | 18.9 | 82.6 |
+| ridge | 35.6 | 75.3 |
+| mlp | 35.9 | 74.6 |
 
 ### Feature sets
 
@@ -215,6 +232,25 @@ features.md     lab notebook with the feature design and decisions
 - Burst times are measured on a desktop-class machine, not on the target microcontroller.
 - Programs run alone, so the results do not cover scheduling under contention.
 - Results in `archive/results_v1` and the figures in `paper/` come from an earlier version of the pipeline and may not match the current runs.
+
+## Observations
+
+All numbers are from the macOS results above.
+
+- **The prediction can be far off and the schedule still good.** Extra trees has a median error of 17.8% and recovers 87.8% of the oracle's improvement. The MLP has a median error of 35.9% and a negative R2, and still recovers 74.6%. Both cut the average wait compared with FIFO, by 55.4% and 47.0%. SJF uses only the order of the jobs, and swapping two programs with similar bursts costs almost nothing.
+- **The error does not predict the schedule.** Gradient boosting has a larger median error (22.7%) than k-nearest neighbors (18.9%) and the decision tree (18.9%), yet a better SJF accuracy (85.5% against 83.1% and 82.6%).
+- **The rank correlation tracks the schedule only roughly.** The top models (extra trees, random forest, SVR) and the bottom ones (ridge, MLP) are the same by either measure. In the middle the two disagree, for example gradient boosting has a lower Spearman than k-nearest neighbors (0.664 against 0.676) but a better scheduling result. The correlation is computed over all 377 programs, while the scheduler only orders batches of 20.
+- **The three best models are close.** Extra trees, random forest and SVR are within 1.3 points of each other, which is about the standard deviation over repeats (0.5 to 1.3). They cannot be separated with these five repeats.
+- **The MLP is unstable.** Its standard deviation over repeats is 5.7 points, against about 1 for the others.
+- **Few features are enough.** For extra trees, two features give 81.6% of the oracle's improvement, seven give 87.8%, and all 30 give 89.2%. For random forest the result is flat from six features on (86.5% to 87.2%).
+- **Depth matters only at the start.** Random forest at depth 1 or 2 underfits (73.6% and 83.6%). From depth 3 to unlimited depth the result stays between 87.0% and 87.7%.
+
+## Conclusion
+
+- A good schedule does not require an accurate burst prediction. The scheduling result depends on the order of the predictions, and models with a median error of 18% to 36% still cut the average wait by 47% to 55% compared with FIFO.
+- Tree ensembles (extra trees and random forest) and SVR are the best models, at 86.5% to 87.8% of the oracle's improvement. Ridge and the MLP are clearly worse, at about 75%.
+- A few features carry most of the value, which keeps the model small. This matters on a microcontroller.
+- The best result leaves about 12% of the oracle's improvement unused, and all models are evaluated on one machine with programs running alone.
 
 ## To do
 
