@@ -1,0 +1,40 @@
+{
+  "model": "ridge",
+  "family": "ridge",
+  "settings": {
+    "alpha": "1.0"
+  },
+  "grid": {
+    "alpha": [
+      "0.1",
+      "1.0",
+      "10.0",
+      "100.0"
+    ]
+  },
+  "training_set": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/linux/training_set.csv",
+  "subsets": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/linux/best_subsets.csv",
+  "primary": "best7",
+  "feature_sets": [
+    "best2",
+    "best3",
+    "best4",
+    "best5",
+    "best6",
+    "best7",
+    "best8",
+    "best9",
+    "all",
+    "history",
+    "best7+history"
+  ],
+  "sweep": true,
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "folds": 5
+}

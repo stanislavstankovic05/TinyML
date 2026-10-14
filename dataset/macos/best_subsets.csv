@@ -1,0 +1,9 @@
+m,score,subset
+2,0.2377,"max_loop_depth, bitops"
+3,0.1819,"max_loop_depth, n_allocas, bitops"
+4,0.1321,"max_loop_depth, n_allocas, divrems, bitops"
+5,0.0905,"max_loop_depth, direct_recursion, n_allocas, divrems, bitops"
+6,0.0623,"n_funcs, max_loop_depth, direct_recursion, mutual_recursion, divrems, bitops"
+7,0.0392,"n_funcs, cyclomatic_max, max_loop_depth, direct_recursion, mutual_recursion, divrems, bitops"
+8,0.0212,"n_funcs, max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, divrems, bitops"
+9,0.0039,"n_funcs, max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, divrems, bitops, fpops"

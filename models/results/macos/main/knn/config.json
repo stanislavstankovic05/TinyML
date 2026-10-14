@@ -1,0 +1,39 @@
+{
+  "model": "knn",
+  "family": "knn",
+  "settings": {
+    "n_neighbors": "15"
+  },
+  "grid": {
+    "n_neighbors": [
+      "3",
+      "5",
+      "9",
+      "15",
+      "25"
+    ]
+  },
+  "training_set": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/macos/training_set.csv",
+  "subsets": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/macos/best_subsets.csv",
+  "primary": "best7",
+  "feature_sets": [
+    "best2",
+    "best3",
+    "best4",
+    "best5",
+    "best6",
+    "best7",
+    "best8",
+    "best9",
+    "all"
+  ],
+  "sweep": true,
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "folds": 5
+}

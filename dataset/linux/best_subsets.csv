@@ -1,0 +1,9 @@
+m,score,subset
+2,0.2666,"max_loop_depth, tti_cost_sum"
+3,0.186,"max_loop_depth, geps, selects"
+4,0.1347,"max_loop_depth, direct_recursion, geps, selects"
+5,0.0973,"max_loop_depth, static_trip_loops, dyn_trip_loops, selects, fpops"
+6,0.0825,"max_loop_depth, static_trip_loops, dyn_trip_loops, mutual_recursion, selects, fpops"
+7,0.0684,"max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, selects, fpops"
+8,0.0511,"max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, geps, selects, fpops"
+9,0.0292,"max_loop_depth, static_trip_loops, dyn_trip_loops, direct_recursion, mutual_recursion, bitops, geps, selects, fpops"

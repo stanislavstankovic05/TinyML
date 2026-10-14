@@ -1,0 +1,50 @@
+{
+  "model": "mlp",
+  "family": "mlp",
+  "settings": {
+    "hidden_layer_sizes": "(16, 8)",
+    "alpha": "0.1",
+    "max_iter": "5000",
+    "early_stopping": "True",
+    "n_iter_no_change": "30"
+  },
+  "grid": {
+    "hidden_layer_sizes": [
+      "(4,)",
+      "(8,)",
+      "(16,)",
+      "(8, 4)",
+      "(16, 8)"
+    ],
+    "alpha": [
+      "0.01",
+      "0.1",
+      "1.0"
+    ]
+  },
+  "training_set": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/linux/training_set.csv",
+  "subsets": "/Users/davidstan/Documents/Projects/mox/TinyML/dataset/linux/best_subsets.csv",
+  "primary": "best7",
+  "feature_sets": [
+    "best2",
+    "best3",
+    "best4",
+    "best5",
+    "best6",
+    "best7",
+    "best8",
+    "best9",
+    "all",
+    "history",
+    "best7+history"
+  ],
+  "sweep": true,
+  "seeds": [
+    101,
+    202,
+    303,
+    404,
+    505
+  ],
+  "folds": 5
+}
